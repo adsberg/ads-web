@@ -6,5 +6,5 @@ export const AppToaster: IToaster =
     ? (null as never)
     : Toaster.create({
         className: "app-toaster",
-        position: Position.BOTTOM,
+        position: Position.TOP
       });

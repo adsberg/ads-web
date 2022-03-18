@@ -32,8 +32,9 @@ export default async function graphQLRequest(
   }
 
   const cacheKey = client.getCacheKey(operation, opts);
-  const cacheValue = await client.request(operation, opts);
+  const cacheValue =
+    (await client.request(operation, opts).catch(console.error)) || null;
 
-  client.saveCache(cacheKey, cacheValue);
-  return cacheValue;
+  client.saveCache(cacheKey, cacheValue || {});
+  return cacheValue || null;
 }

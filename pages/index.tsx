@@ -29,7 +29,11 @@ const Home: NextPage = () => {
         {user ? (
           <Link href={"/logout"}>Logout</Link>
         ) : (
-          <Link href={"/login"}>Login</Link>
+          <>
+            <Link href={"/login"}>Login</Link>
+            <br />
+            <Link href={"/register"}>Register</Link>
+          </>
         )}
         <TestItemComponent />
         <TestList />
@@ -92,12 +96,12 @@ const Home: NextPage = () => {
 
 export default Home;
 
-export async function getStaticProps() {
+export async function getServerStaticProps() {
   const client = initializeGraphQL();
 
   await Promise.all([
-    graphQLRequest(client, TEST_LIST_QUERY, testItemsQueryOptions()),
-    graphQLRequest(client, TEST_ITEM_QUERY, testItemQueryOptions())
+    graphQLRequest(client, TEST_LIST_QUERY),
+    graphQLRequest(client, TEST_ITEM_QUERY)
   ]);
 
   return {

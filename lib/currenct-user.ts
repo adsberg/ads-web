@@ -32,7 +32,7 @@ export const useCurrentUser = ({
   if (existingToken)
     client.setHeader("Authorization", `Bearer ${existingToken}`);
 
-  const { data, error, refetch } = useQuery<
+  const { data, error, refetch, loading } = useQuery<
     { user: CurrentUser | null },
     object,
     GraphQLError
@@ -72,5 +72,5 @@ export const useCurrentUser = ({
     refetch();
   };
 
-  return { user, onLogin, updateUser, logout };
+  return { user, onLogin, updateUser, logout, loading };
 };

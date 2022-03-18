@@ -1,11 +1,8 @@
-import { FormEvent, useContext, useState } from "react";
-import { ClientContext, useMutation } from "graphql-hooks";
-import Router from "next/router";
+import { FormEvent, useState } from "react";
+import { useMutation } from "graphql-hooks";
 import { Jwt } from "../../api-client/types";
 import { GraphQLError } from "graphql";
 import handleError from "../../lib/handle-api-error";
-import { useCookies } from "react-cookie";
-import config from "../../lib/config";
 import { Button, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { useCurrentUser } from "../../lib/currenct-user";
 
@@ -18,12 +15,13 @@ const LOGIN_MUTATION = `
   }
 `;
 
-export default function LoginComponent() {
+export default function LoginForm() {
   const [loginUserMutation] = useMutation<{ login: Jwt }, object, GraphQLError>(
     LOGIN_MUTATION
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const { onLogin } = useCurrentUser({
     redirectTo: "/",
@@ -32,15 +30,16 @@ export default function LoginComponent() {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    const { data, error } = await loginUserMutation({
+    if (isLoading) return false;
+    const { data, error, loading } = await loginUserMutation({
       variables: { email, password }
     });
+    setLoading(loading);
     if (error) {
       handleError(error);
     } else if (data) {
       const { token } = data.login;
       onLogin(token);
-      // Router.push("/");
     }
   };
 
@@ -51,6 +50,7 @@ export default function LoginComponent() {
         label="Email"
         labelFor="email-input"
         labelInfo="*"
+        disabled={isLoading}
       >
         <InputGroup
           required={true}
@@ -65,6 +65,7 @@ export default function LoginComponent() {
         label="Password"
         labelFor="pass-input"
         labelInfo="*"
+        disabled={isLoading}
       >
         <InputGroup
           required={true}
@@ -74,7 +75,12 @@ export default function LoginComponent() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </FormGroup>
-      <Button icon="log-in" type="submit" intent={Intent.PRIMARY}>
+      <Button
+        icon="log-in"
+        type="submit"
+        intent={Intent.PRIMARY}
+        disabled={isLoading}
+      >
         {"Login"}
       </Button>
     </form>
