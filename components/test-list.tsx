@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, UseQueryOptions } from "graphql-hooks";
-import { TestItem } from "../lib/api/types";
+import { TestItem } from "../api-client/types";
 
 export const TEST_LIST_QUERY = `
   query TestListQuery {
@@ -11,7 +11,7 @@ export const TEST_LIST_QUERY = `
   }
 `;
 
-export const testItemsQueryOptions = ():UseQueryOptions<any> => ({
+export const testItemsQueryOptions = (): UseQueryOptions<any> => ({
   variables: {},
   updateData: (prevResult, result) => ({
     ...result,
@@ -31,7 +31,7 @@ export default function TestList() {
   if (error) return <div>Error loading posts.</div>;
   if (!data) return <div>Loading</div>;
 
-  const {testItems} = data;
+  const { testItems } = data;
   // const areMorePosts = allPosts.length < _allPostsMeta.count;
 
   return (

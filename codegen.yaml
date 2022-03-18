@@ -1,0 +1,7 @@
+# codegen.yaml
+schema: http://localhost:42102/graphql
+
+generates:
+  ./api-client/types.ts:
+    plugins:
+      - typescript

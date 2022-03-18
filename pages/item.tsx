@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 import TestItemComponent, {
   testItemQueryOptions,
   TEST_ITEM_QUERY
@@ -10,13 +9,11 @@ import TestList, {
   testItemsQueryOptions,
   TEST_LIST_QUERY
 } from "../components/test-list";
-import { useCurrentUser } from "../lib/currenct-user";
 import { initializeGraphQL } from "../lib/graphql-client";
 import graphQLRequest from "../lib/graphql-request";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const { user } = useCurrentUser();
   return (
     <div className={styles.container}>
       <Head>
@@ -26,11 +23,6 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {user ? (
-          <Link href={"/logout"}>Logout</Link>
-        ) : (
-          <Link href={"/login"}>Login</Link>
-        )}
         <TestItemComponent />
         <TestList />
 
