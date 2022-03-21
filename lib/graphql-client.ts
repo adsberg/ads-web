@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { GraphQLClient } from "graphql-hooks";
 import memCache from "graphql-hooks-memcache";
+import { useCookies } from "react-cookie";
+import config from "./config";
 
 let graphQLClient: GraphQLClient;
 
@@ -36,5 +38,9 @@ export function initializeGraphQL(initialState?: object) {
 
 export function useGraphQLClient(initialState?: object) {
   const store = useMemo(() => initializeGraphQL(initialState), [initialState]);
+  const [cookies] = useCookies([config.userTokenStoreName]);
+  const existingToken = cookies[config.userTokenStoreName];
+  if (existingToken)
+    store.setHeader("Authorization", `Bearer ${existingToken}`);
   return store;
 }

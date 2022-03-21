@@ -1,8 +1,11 @@
-import { ClientContext, GraphQLClient } from "graphql-hooks";
-import React, { useContext, createContext } from "react";
+import { GraphQLError } from "graphql";
+import { ClientContext, GraphQLClient, useQuery } from "graphql-hooks";
+import Router from "next/router";
+import React, { useContext, createContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import config from "./config";
 import { useGraphQLClient } from "./graphql-client";
+import handleError from "./handle-api-error";
 
 export interface AuthContextValue {
   setAuthToken: (token: string | null) => void;
@@ -11,10 +14,10 @@ export interface AuthContextValue {
   client: GraphQLClient;
 }
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+const AuthContext = createContext<AuthContextValue>(null as never);
 
-export function AuthProvider({ children, pageProps }: any) {
-  const auth = useProvideAuth(pageProps.initialGraphQLState);
+export function AuthProvider({ children, initialGraphQLState }: any) {
+  const auth = useProvideAuth(initialGraphQLState);
 
   return (
     <AuthContext.Provider value={auth}>
@@ -24,10 +27,6 @@ export function AuthProvider({ children, pageProps }: any) {
     </AuthContext.Provider>
   );
 }
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
 
 export const CURRENT_USER_QUERY = `
   query Me {
@@ -44,6 +43,37 @@ export interface CurrentUser {
   email: string;
   username: string;
 }
+
+export const useUser = () => {
+  const { data, error, loading } = useQuery<
+    { user: CurrentUser | null },
+    object,
+    GraphQLError
+  >(CURRENT_USER_QUERY);
+
+  const user = data?.user || null;
+  useEffect(() => {
+    if (error) handleError(error);
+  }, [error]);
+
+  return { user, loading, error };
+};
+
+export const useAuth = ({ redirectTo = "", redirectIfFound = false } = {}) => {
+  const context = useContext(AuthContext);
+  const isSignedIn = context.isSignedIn();
+
+  useEffect(() => {
+    if (
+      redirectTo &&
+      ((!redirectIfFound && !isSignedIn) || (redirectIfFound && isSignedIn))
+    ) {
+      Router.push(redirectTo);
+    }
+  }, [redirectIfFound, redirectTo, isSignedIn]);
+
+  return context;
+};
 
 function useProvideAuth(initialGraphQLState?: object): AuthContextValue {
   const [cookies, setCookie, deleteCookie] = useCookies([

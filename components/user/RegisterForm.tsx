@@ -4,8 +4,6 @@ import { Jwt } from "../../api-client/types";
 import { GraphQLError } from "graphql";
 import handleError from "../../lib/handle-api-error";
 import { Button, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
-import { useCurrentUser } from "../../lib/currenct-user";
-import Router from "next/router";
 
 const REGISTER_MUTATION = `
   mutation RegisterMutation($input: InputRegister!) {
@@ -16,7 +14,11 @@ const REGISTER_MUTATION = `
   }
 `;
 
-export default function RegisterForm() {
+export type RegisterFormProps = {
+  onRegister: (token: string) => void;
+};
+
+export default function RegisterForm({ onRegister }: RegisterFormProps) {
   const [registerUserMutation] = useMutation<
     { register: Jwt },
     object,
@@ -26,8 +28,6 @@ export default function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-
-  const { onLogin } = useCurrentUser();
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,8 +40,7 @@ export default function RegisterForm() {
       handleError(error);
     } else if (data) {
       const { token } = data.register;
-      onLogin(token);
-      Router.push("/");
+      onRegister(token);
     }
   };
 

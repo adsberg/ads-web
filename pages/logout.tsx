@@ -1,18 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { useEffect } from "react";
-import { useCurrentUser } from "../lib/currenct-user";
-import styles from "../styles/Home.module.css";
+import { useAuth } from "../lib/auth";
 
 const Logout: NextPage = () => {
-  const { logout, user } = useCurrentUser({
+  const { signOut, isSignedIn } = useAuth({
     redirectTo: "/",
     redirectIfFound: false
   });
 
   useEffect(() => {
-    if (user) logout();
+    if (isSignedIn()) signOut();
   });
 
   return (

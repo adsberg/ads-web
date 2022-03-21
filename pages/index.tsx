@@ -1,22 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
-import TestItemComponent, {
-  testItemQueryOptions,
-  TEST_ITEM_QUERY
-} from "../components/test-item";
-import TestList, {
-  testItemsQueryOptions,
-  TEST_LIST_QUERY
-} from "../components/test-list";
-import { useCurrentUser } from "../lib/currenct-user";
+import { useAuth } from "../lib/auth";
 import { initializeGraphQL } from "../lib/graphql-client";
-import graphQLRequest from "../lib/graphql-request";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const { user } = useCurrentUser();
+  const { isSignedIn } = useAuth();
   return (
     <div className={styles.container}>
       <Head>
@@ -26,8 +16,12 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {user ? (
-          <Link href={"/logout"}>Logout</Link>
+        {isSignedIn() ? (
+          <>
+            <Link href={"/add"}>Add</Link>
+            <br />
+            <Link href={"/logout"}>Logout</Link>
+          </>
         ) : (
           <>
             <Link href={"/login"}>Login</Link>
@@ -35,61 +29,11 @@ const Home: NextPage = () => {
             <Link href={"/register"}>Register</Link>
           </>
         )}
-        <TestItemComponent />
-        <TestList />
 
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 };
@@ -99,10 +43,10 @@ export default Home;
 export async function getServerStaticProps() {
   const client = initializeGraphQL();
 
-  await Promise.all([
-    graphQLRequest(client, TEST_LIST_QUERY),
-    graphQLRequest(client, TEST_ITEM_QUERY)
-  ]);
+  // await Promise.all([
+  //   graphQLRequest(client, TEST_LIST_QUERY),
+  //   graphQLRequest(client, TEST_ITEM_QUERY)
+  // ]);
 
   return {
     props: {

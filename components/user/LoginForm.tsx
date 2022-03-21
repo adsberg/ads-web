@@ -4,7 +4,6 @@ import { Jwt } from "../../api-client/types";
 import { GraphQLError } from "graphql";
 import handleError from "../../lib/handle-api-error";
 import { Button, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
-import { useCurrentUser } from "../../lib/currenct-user";
 
 const LOGIN_MUTATION = `
   mutation LoginMutation($email: String!, $password: String!) {
@@ -15,18 +14,17 @@ const LOGIN_MUTATION = `
   }
 `;
 
-export default function LoginForm() {
+export type LoginFormProps = {
+  onLogin: (token: string) => void;
+};
+
+export default function LoginForm({ onLogin }: LoginFormProps) {
   const [loginUserMutation] = useMutation<{ login: Jwt }, object, GraphQLError>(
     LOGIN_MUTATION
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-
-  const { onLogin } = useCurrentUser({
-    redirectTo: "/",
-    redirectIfFound: true
-  });
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
