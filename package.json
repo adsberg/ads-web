@@ -10,14 +10,14 @@
     "api-types": "graphql-codegen"
   },
   "dependencies": {
-    "@blueprintjs/core": "^4.0.0-rc.1",
-    "@blueprintjs/icons": "^4.0.0-rc.1",
+    "@blueprintjs/core": "^4.2.1",
+    "@blueprintjs/icons": "^4.2.1",
     "graphql-hooks": "^5.7.1",
     "graphql-hooks-memcache": "^2.2.4",
     "next": "12.1.0",
-    "react": "17.0.2",
+    "react": "^18.1.0",
     "react-cookie": "^4.1.1",
-    "react-dom": "17.0.2"
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.2",

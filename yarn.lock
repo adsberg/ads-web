@@ -470,18 +470,18 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@blueprintjs/colors@^4.0.0-rc.1":
-  version "4.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/colors/-/colors-4.0.0-rc.1.tgz#93642c93dda46224bcf5fd430aeb497a09c69a4b"
-  integrity sha512-UVxX6erTxyBXGUGAR9Yu23VbZ6GFGCw7JJ+YJA6qbSSarL8EsnsrLIeipxukZrm+rlxQn0yEQM4LnoRC2hlxow==
+"@blueprintjs/colors@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/colors/-/colors-4.1.1.tgz#ddaa27a23f5029e983084012130b8c47df71e800"
+  integrity sha512-uA/TDvIOG/TJ+mDJNerFRK5WnUJlInbRshzHI5SbJXlaPXXIj5BMxAXB67izH0gjvSNj5cXy/9UIgTO2WCB7XA==
 
-"@blueprintjs/core@^4.0.0-rc.1":
-  version "4.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-4.0.0-rc.1.tgz#53d601e197bf87d35639c7bb4345df6aa43026f5"
-  integrity sha512-rnXIcfd1G65LAUYrSfF33ujwC6u1Ch27Rvv4dIj5xgTE1L0oA3dXIi3vFiDz/9JH4Bd5E2d+gTCesDHWsz5fxQ==
+"@blueprintjs/core@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-4.2.1.tgz#477d44b8da81c285ccd2e3eb9243e73f463ef275"
+  integrity sha512-hd5kiPzyicfqYsapMiNRG2SNQGJK+pkJH914xODVBmF0SK4jnmZk1cCEjhNfp9ibjxHxOCZsxAU7Gy8NgAonyw==
   dependencies:
-    "@blueprintjs/colors" "^4.0.0-rc.1"
-    "@blueprintjs/icons" "^4.0.0-rc.1"
+    "@blueprintjs/colors" "^4.1.1"
+    "@blueprintjs/icons" "^4.2.4"
     "@juggle/resize-observer" "^3.3.1"
     "@types/dom4" "^2.0.1"
     classnames "^2.2"
@@ -492,10 +492,10 @@
     react-transition-group "^4.4.1"
     tslib "~2.3.1"
 
-"@blueprintjs/icons@^4.0.0-rc.1":
-  version "4.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-4.0.0-rc.1.tgz#4420b7060a3fc39ba25b315fc23229bf2d9afb7e"
-  integrity sha512-tEK55Di66XhSdvdRpS4LanXporFiXrWFcr7bUVpQ2fdRbZF0HFFbVVLRK+kualm73xBH3a3mMyXMfc/mU7//qg==
+"@blueprintjs/icons@^4.2.1", "@blueprintjs/icons@^4.2.4":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-4.2.4.tgz#82cf7e020ebc9ea1c689cba191d8d5d8c51cdf4c"
+  integrity sha512-dbRoAmh4SCQGCuIgMmxYHcAknW9MIhASYbvlzSPR6fV9poewuMemzTQMLiLT8Ztvigb7YwkBZjDSDF3yq6s5uw==
   dependencies:
     change-case "^4.1.2"
     classnames "^2.2"
@@ -3943,14 +3943,13 @@ react-cookie@^4.1.1:
     hoist-non-react-statics "^3.0.0"
     universal-cookie "^4.0.0"
 
-react-dom@17.0.2:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
-  integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
+react-dom@^18.1.0:
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.1.0.tgz#7f6dd84b706408adde05e1df575b3a024d7e8a2f"
+  integrity sha512-fU1Txz7Budmvamp7bshe4Zi32d0ll7ect+ccxNu9FlObT605GOEB8BfO4tmRJ39R5Zj831VCpvQ05QPBW5yb+w==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    scheduler "^0.20.2"
+    scheduler "^0.22.0"
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
@@ -3980,13 +3979,12 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@17.0.2:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
-  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+react@^18.1.0:
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.1.0.tgz#6f8620382decb17fdc5cc223a115e2adbf104890"
+  integrity sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 readable-stream@^3.4.0:
   version "3.6.0"
@@ -4210,13 +4208,12 @@ sass@^1.49.9:
     immutable "^4.0.0"
     source-map-js ">=0.6.2 <2.0.0"
 
-scheduler@^0.20.2:
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.20.2.tgz#4baee39436e34aa93b4874bddcbf0fe8b8b50e91"
-  integrity sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==
+scheduler@^0.22.0:
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.22.0.tgz#83a5d63594edf074add9a7198b1bae76c3db01b8"
+  integrity sha512-6QAm1BgQI88NPYymgGQLCZgvep4FyePDWFpXVK+zNSUgHwlqpJy8VEh8Et0KxTACS4VWwMousBElAZOH9nkkoQ==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scuid@^1.1.0:
   version "1.1.0"

@@ -20,9 +20,9 @@ export type Scalars = {
 
 export type Ad = {
   __typename?: 'Ad';
-  categoryId: Scalars['String'];
   content?: Maybe<AdContent>;
   createdAt: Scalars['Timestamp'];
+  expiresAt?: Maybe<Scalars['Timestamp']>;
   id: Scalars['String'];
   images: Array<TypeImage>;
   /** User input price */
@@ -30,10 +30,11 @@ export type Ad = {
   lastPublishedAt?: Maybe<Scalars['Timestamp']>;
   /** System currency price */
   price?: Maybe<Monetary>;
-  propertyValues: Array<AdPropertyValue>;
   status: AdStatus;
+  tags: Array<Tag>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['Timestamp']>;
+  user: PublicUser;
   userId: Scalars['String'];
   userPhoneId?: Maybe<Scalars['String']>;
 };
@@ -48,19 +49,42 @@ export enum AdContentFormat {
   Md = 'MD'
 }
 
-export type AdPropertyValue = {
-  __typename?: 'AdPropertyValue';
-  adId: Scalars['String'];
+export type AdItem = {
+  __typename?: 'AdItem';
   createdAt: Scalars['Timestamp'];
+  expiresAt?: Maybe<Scalars['Timestamp']>;
   id: Scalars['String'];
-  inputUnitId: Scalars['String'];
-  inputValue: Scalars['String'];
-  propertyId: Scalars['String'];
-  type: TagValueType;
-  unitId: Scalars['String'];
+  images: Array<TypeImage>;
+  /** User input price */
+  inputPrice?: Maybe<Monetary>;
+  lastPublishedAt?: Maybe<Scalars['Timestamp']>;
+  /** System currency price */
+  price?: Maybe<Monetary>;
+  status: AdStatus;
+  tags: Array<Tag>;
+  title: Scalars['String'];
   updatedAt?: Maybe<Scalars['Timestamp']>;
-  value: Scalars['String'];
+  userId: Scalars['String'];
 };
+
+export type AdPrototype = {
+  __typename?: 'AdPrototype';
+  createdAt: Scalars['Timestamp'];
+  currencyCode?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  id: Scalars['String'];
+  price?: Maybe<Scalars['BigInt']>;
+  source: AdPrototypeSource;
+  tags: Array<Tag>;
+  title: Scalars['String'];
+  updatedAt?: Maybe<Scalars['Timestamp']>;
+};
+
+export enum AdPrototypeSource {
+  Okazii = 'OKAZII',
+  Olx = 'OLX',
+  Phonemore = 'PHONEMORE'
+}
 
 export enum AdStatus {
   Active = 'ACTIVE',
@@ -87,32 +111,10 @@ export enum ErrorCode {
   WeakPassword = 'WEAK_PASSWORD'
 }
 
-export type InputAddTag = {
-  description?: InputMaybe<Scalars['String']>;
-  iconId?: InputMaybe<Scalars['ID']>;
-  id?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  parentId?: InputMaybe<Scalars['ID']>;
-  shortName?: InputMaybe<Scalars['String']>;
-  symbol?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<TagType>;
-};
-
 export type InputChangePassword = {
   newPassword: Scalars['String'];
   newPasswordRepeat: Scalars['String'];
   oldPassword: Scalars['String'];
-};
-
-export type InputCreateAd = {
-  categoryId: Scalars['String'];
-  content?: InputMaybe<InputCreateAdContent>;
-  currencyCode?: InputMaybe<Scalars['String']>;
-  imageIds?: InputMaybe<Array<Scalars['String']>>;
-  price?: InputMaybe<Scalars['BigInt']>;
-  propertyValues?: InputMaybe<Array<InputCreateAdProperty>>;
-  title?: InputMaybe<Scalars['String']>;
-  userPhoneId?: InputMaybe<Scalars['String']>;
 };
 
 export type InputCreateAdContent = {
@@ -120,10 +122,38 @@ export type InputCreateAdContent = {
   format: AdContentFormat;
 };
 
-export type InputCreateAdProperty = {
-  propertyId: Scalars['String'];
-  unitId?: InputMaybe<Scalars['String']>;
-  value: Scalars['String'];
+export type InputCreatePropertySchema = {
+  allowCreate?: InputMaybe<Scalars['Boolean']>;
+  defaultValueId?: InputMaybe<Scalars['ID']>;
+  isUserInput: Scalars['Boolean'];
+  max?: InputMaybe<Scalars['Float']>;
+  maxFunction?: InputMaybe<PropertyValueFunction>;
+  maxItems?: InputMaybe<Scalars['Int']>;
+  min?: InputMaybe<Scalars['Float']>;
+  minFunction?: InputMaybe<PropertyValueFunction>;
+  minItems?: InputMaybe<Scalars['Int']>;
+  pattern?: InputMaybe<Scalars['String']>;
+  priority: Scalars['Int'];
+  propertyId: Scalars['ID'];
+  required?: InputMaybe<Scalars['Boolean']>;
+  type: PropertyValueType;
+  unitIds?: InputMaybe<Array<Scalars['ID']>>;
+  valueIds?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+export type InputFindOrCreateTag = {
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  numberValue?: InputMaybe<Scalars['Float']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  propertyId?: InputMaybe<Scalars['ID']>;
+  shortName?: InputMaybe<Scalars['String']>;
+  stringValue?: InputMaybe<Scalars['String']>;
+  symbol?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<TagType>;
+  unitId?: InputMaybe<Scalars['ID']>;
+  wikiDataId?: InputMaybe<Scalars['String']>;
 };
 
 export type InputRegister = {
@@ -139,25 +169,43 @@ export type InputResetPassword = {
 };
 
 export type InputSaveAd = {
-  add?: InputMaybe<InputSaveAdAdd>;
-  id: Scalars['String'];
-  remove?: InputMaybe<InputSaveAdAdd>;
-  set?: InputMaybe<InputSaveAdSet>;
-};
-
-export type InputSaveAdAdd = {
-  imageIds?: InputMaybe<Array<Scalars['String']>>;
-  propertyValues?: InputMaybe<Array<InputCreateAdProperty>>;
-};
-
-export type InputSaveAdSet = {
   content?: InputMaybe<InputCreateAdContent>;
   currencyCode?: InputMaybe<Scalars['String']>;
-  imageIds?: InputMaybe<Array<Scalars['String']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  images?: InputMaybe<Array<Scalars['ID']>>;
   price?: InputMaybe<Scalars['BigInt']>;
-  propertyValues?: InputMaybe<Array<InputCreateAdProperty>>;
+  tags?: InputMaybe<Array<Scalars['ID']>>;
   title?: InputMaybe<Scalars['String']>;
-  userPhoneId?: InputMaybe<Scalars['String']>;
+  userPhoneId?: InputMaybe<Scalars['ID']>;
+};
+
+export type InputSaveAdPrototype = {
+  currencyCode?: InputMaybe<Scalars['String']>;
+  description: Scalars['String'];
+  id: Scalars['String'];
+  price?: InputMaybe<Scalars['BigInt']>;
+  source: AdPrototypeSource;
+  /** Tag ids */
+  tags: Array<Scalars['String']>;
+  title: Scalars['String'];
+};
+
+export type InputUpdatePropertySchema = {
+  allowCreate?: InputMaybe<Scalars['Boolean']>;
+  defaultValueId?: InputMaybe<Scalars['ID']>;
+  id: Scalars['ID'];
+  isUserInput?: InputMaybe<Scalars['Boolean']>;
+  max?: InputMaybe<Scalars['Float']>;
+  maxFunction?: InputMaybe<PropertyValueFunction>;
+  maxItems?: InputMaybe<Scalars['Int']>;
+  min?: InputMaybe<Scalars['Float']>;
+  minFunction?: InputMaybe<PropertyValueFunction>;
+  minItems?: InputMaybe<Scalars['Int']>;
+  pattern?: InputMaybe<Scalars['String']>;
+  priority?: InputMaybe<Scalars['Int']>;
+  required?: InputMaybe<Scalars['Boolean']>;
+  unitIds?: InputMaybe<Array<Scalars['ID']>>;
+  valueIds?: InputMaybe<Array<Scalars['ID']>>;
 };
 
 export type Jwt = {
@@ -181,15 +229,18 @@ export type Monetary = {
 export type Mutation = {
   __typename?: 'Mutation';
   addPhone: UserPhone;
-  addTag: Tag;
   changePassword: Jwt;
-  createAd: Ad;
+  createPropertySchema: PropertySchema;
+  deleteTag: Scalars['Boolean'];
+  findOrCreateTag: Tag;
   forgotPassword: Scalars['Boolean'];
   login: Jwt;
   logout: Scalars['Boolean'];
   register: Jwt;
   resetPassword: Scalars['Boolean'];
   saveAd: Ad;
+  saveAdPrototype: AdPrototype;
+  updatePropertySchema: PropertySchema;
   uploadImage: TypeImage;
   verifyEmail: Scalars['Boolean'];
 };
@@ -200,18 +251,23 @@ export type MutationAddPhoneArgs = {
 };
 
 
-export type MutationAddTagArgs = {
-  input: InputAddTag;
-};
-
-
 export type MutationChangePasswordArgs = {
   input: InputChangePassword;
 };
 
 
-export type MutationCreateAdArgs = {
-  input: InputCreateAd;
+export type MutationCreatePropertySchemaArgs = {
+  input: InputCreatePropertySchema;
+};
+
+
+export type MutationDeleteTagArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationFindOrCreateTagArgs = {
+  input: InputFindOrCreateTag;
 };
 
 
@@ -246,6 +302,16 @@ export type MutationSaveAdArgs = {
 };
 
 
+export type MutationSaveAdPrototypeArgs = {
+  input: InputSaveAdPrototype;
+};
+
+
+export type MutationUpdatePropertySchemaArgs = {
+  input: InputUpdatePropertySchema;
+};
+
+
 export type MutationUploadImageArgs = {
   file: Scalars['Upload'];
 };
@@ -255,6 +321,49 @@ export type MutationVerifyEmailArgs = {
   token: Scalars['String'];
 };
 
+export type PropertySchema = {
+  __typename?: 'PropertySchema';
+  allowCreate?: Maybe<Scalars['Boolean']>;
+  createdAt: Scalars['Timestamp'];
+  defaultValueId?: Maybe<Scalars['ID']>;
+  id: Scalars['String'];
+  isUserInput: Scalars['Boolean'];
+  max?: Maybe<Scalars['Float']>;
+  maxFunction?: Maybe<PropertyValueFunction>;
+  maxItems?: Maybe<Scalars['Int']>;
+  min?: Maybe<Scalars['Float']>;
+  minFunction?: Maybe<PropertyValueFunction>;
+  minItems?: Maybe<Scalars['Int']>;
+  pattern?: Maybe<Scalars['String']>;
+  priority: Scalars['Int'];
+  propertyId: Scalars['ID'];
+  required?: Maybe<Scalars['Boolean']>;
+  type: PropertyValueType;
+  unitIds?: Maybe<Array<Scalars['ID']>>;
+  updatedAt?: Maybe<Scalars['Timestamp']>;
+  valueIds?: Maybe<Array<Scalars['ID']>>;
+};
+
+export enum PropertyValueFunction {
+  CurrentYear = 'CURRENT_YEAR',
+  Minus1Year = 'MINUS1YEAR'
+}
+
+export enum PropertyValueType {
+  Date = 'DATE',
+  Number = 'NUMBER',
+  String = 'STRING'
+}
+
+export type PublicUser = {
+  __typename?: 'PublicUser';
+  createdAt: Scalars['Timestamp'];
+  id: Scalars['String'];
+  lastLoginAt?: Maybe<Scalars['Timestamp']>;
+  updatedAt?: Maybe<Scalars['Timestamp']>;
+  username: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Returns false if user already exists */
@@ -262,7 +371,14 @@ export type Query = {
   /** Returns false if user already exists */
   checkUsername: Scalars['Boolean'];
   errorCodes: Array<ErrorCode>;
+  findAd: Array<AdItem>;
+  findTags: Array<Tag>;
+  getAd?: Maybe<Ad>;
+  getPropertySchema?: Maybe<PropertySchema>;
+  getTag?: Maybe<Tag>;
   me?: Maybe<User>;
+  publicFindAd: Array<AdItem>;
+  suggestAdProps: Array<Tag>;
   testItem?: Maybe<TestItem>;
   testItems: Array<TestItem>;
   validatePasswordResetToken: Scalars['Boolean'];
@@ -276,6 +392,66 @@ export type QueryCheckEmailArgs = {
 
 export type QueryCheckUsernameArgs = {
   username: Scalars['String'];
+};
+
+
+export type QueryFindAdArgs = {
+  allTagIds?: InputMaybe<Array<Scalars['ID']>>;
+  anyTagIds?: InputMaybe<Array<Scalars['ID']>>;
+  ids?: InputMaybe<Array<Scalars['ID']>>;
+  limit: Scalars['Int'];
+  maxPrice?: InputMaybe<Scalars['BigInt']>;
+  minPrice?: InputMaybe<Scalars['BigInt']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  omitIds?: InputMaybe<Array<Scalars['ID']>>;
+  omitStatus?: InputMaybe<Array<AdStatus>>;
+  status?: InputMaybe<Array<AdStatus>>;
+  userId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryFindTagsArgs = {
+  ids?: InputMaybe<Array<Scalars['ID']>>;
+  limit: Scalars['Int'];
+  offset?: InputMaybe<Scalars['Int']>;
+  omitIds?: InputMaybe<Array<Scalars['ID']>>;
+  omitTypes?: InputMaybe<Array<Scalars['ID']>>;
+  query?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<TagType>;
+};
+
+
+export type QueryGetAdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetPropertySchemaArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetTagArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryPublicFindAdArgs = {
+  allTagIds?: InputMaybe<Array<Scalars['ID']>>;
+  anyTagIds?: InputMaybe<Array<Scalars['ID']>>;
+  ids?: InputMaybe<Array<Scalars['ID']>>;
+  limit: Scalars['Int'];
+  maxPrice?: InputMaybe<Scalars['BigInt']>;
+  minPrice?: InputMaybe<Scalars['BigInt']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  omitIds?: InputMaybe<Array<Scalars['ID']>>;
+  userId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QuerySuggestAdPropsArgs = {
+  description?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
 };
 
 
@@ -296,12 +472,19 @@ export type Tag = {
   iconId?: Maybe<Scalars['ID']>;
   id: Scalars['String'];
   name: Scalars['String'];
-  parent?: Maybe<Tag>;
-  parentId?: Maybe<Scalars['ID']>;
+  numberValue?: Maybe<Scalars['Float']>;
+  property?: Maybe<Tag>;
+  propertyId?: Maybe<Scalars['ID']>;
+  schema?: Maybe<PropertySchema>;
+  /** Admin only */
+  searchText?: Maybe<Scalars['String']>;
   shortName?: Maybe<Scalars['String']>;
   status: TagStatus;
+  stringValue?: Maybe<Scalars['String']>;
   symbol?: Maybe<Scalars['String']>;
   type: TagType;
+  unit?: Maybe<Tag>;
+  unitId?: Maybe<Scalars['ID']>;
   updatedAt?: Maybe<Scalars['Timestamp']>;
 };
 
@@ -311,18 +494,9 @@ export enum TagStatus {
 }
 
 export enum TagType {
-  Category = 'CATEGORY',
   Property = 'PROPERTY',
-  Unit = 'UNIT',
-  Value = 'VALUE'
-}
-
-export enum TagValueType {
-  Date = 'DATE',
-  Float = 'FLOAT',
-  Integer = 'INTEGER',
-  String = 'STRING',
-  TagId = 'TAG_ID'
+  Tag = 'TAG',
+  Unit = 'UNIT'
 }
 
 export type TestItem = {
